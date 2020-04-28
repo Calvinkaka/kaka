@@ -47,4 +47,4 @@ if __name__ == "__main__":
     # db_conn.add_data(access_token, data)
     # db_conn.query_data(access_token)
     # db_conn.delete_data(access_token, '87017e375ea4fe390033dd7f6fda8221')
-    # print(access_token)
+    print(access_token)
