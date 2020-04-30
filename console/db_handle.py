@@ -29,7 +29,7 @@ class db_handle:
         # print(type(data))
         data['env'] = 'ming-tt86j'
         response = requests.post(url, data=json.dumps(data))
-        print('1.新增集合：' + response.text)
+        print('0.新增集合：' + response.text)
 
     # '''新增数据'''
     @staticmethod
@@ -49,30 +49,7 @@ class db_handle:
             "query": query
         }
         response = requests.post(url, data=json.dumps(data))
-        print('2.新增数据：' + response.text)
-
-    # '''查询数据'''
-    @staticmethod
-    def query_data(access_token):
-        url = 'https://api.weixin.qq.com/tcb/databasequery?access_token={0}'.format(access_token)
-        query = '''
-                 db.collection(\"test_collection\").get()
-                '''
-        data = {
-            "env": "ming-tt86j",
-            "query": query
-        }
-        response = requests.post(url, data=json.dumps(data))
-        print('3.查询数据：' + response.text)
-        result = response.json()
-        result_list = (result['data'])
-        for i in range(len(result_list)):
-            result_value = json.loads(result['data'][i])
-            print(result_value)
-
-        # for i in range(len(result_list)):
-        #     print(type(result_list[i]))
-        #     print(result_list[i])
+        print('1.新增数据：' + response.text)
 
     # '''删除数据'''
     @staticmethod
@@ -85,4 +62,105 @@ class db_handle:
             "query": query
         }
         response = requests.post(url, data=json.dumps(data))
-        print('4.删除数据：' + response.text)
+        print('3.删除数据：' + response.text)
+
+    # '''修改数据'''
+    @staticmethod
+    def modify_data(access_token, query):
+        url = 'https://api.weixin.qq.com/tcb/databaseupdate?access_token={0}'.format(access_token)
+        # query = ''''''
+        data = {
+            "env": "ming-tt86j",
+            "query": query
+        }
+        response = requests.post(url, data=json.dumps(data))
+        print('4.修改数据：' + response.text)
+
+    # '''查询数据'''
+    @staticmethod
+    def query_data(access_token, query):
+        url = 'https://api.weixin.qq.com/tcb/databasequery?access_token={0}'.format(access_token)
+        # query = '''
+        #          db.collection(\"introduction\").limit(100).get()
+        #         '''
+        data = {
+            "env": "ming-tt86j",
+            "query": query
+        }
+        response = requests.post(url, data=json.dumps(data))
+        print('5.查询数据：' + response.text)
+        result = response.json()
+        # print(type(result))
+        # print(result)
+        result_list = (result['data'])
+        # print(type(result_list))
+        # print(result_list)
+        for i in range(len(result_list)):
+            result_value = json.loads(result['data'][i])
+            print(result_value)
+        return result_list
+
+    # '''查询单条数据'''
+    @staticmethod
+    def query_data_one(access_token, query):
+        url = 'https://api.weixin.qq.com/tcb/databasequery?access_token={0}'.format(access_token)
+        # query = '''
+        #          db.collection(\"introduction\").limit(100).get()
+        #         '''
+        data = {
+            "env": "ming-tt86j",
+            "query": query
+        }
+        response = requests.post(url, data=json.dumps(data))
+        print('5.查询数据：' + response.text)
+        result = response.json()
+        result_list = (result['data'])
+        return result_list
+
+    @staticmethod
+    def query_result_handle(query_response):
+        query_response = query_response[0]
+        query_response = query_response.split(',')
+        # print(query_response)
+        # print(len(query_response))
+        query_result = []
+        for i in range(len(query_response)):
+            element = query_response[i].split(':')
+            element = element[1].replace('"', '')
+            # print(element)
+            query_result.append(element)
+        return query_result
+
+    @staticmethod
+    def question_Single(query_result):
+        query_return = [query_result[3], query_result[4], query_result[5], query_result[6], query_result[7],
+                        query_result[9], query_result[10]]
+        return query_return
+
+    @staticmethod
+    def question_multiple(query_result):
+        query_return = [query_result[3], query_result[4], query_result[5], query_result[6], query_result[7],
+                        query_result[9], query_result[10]]
+        return query_return
+
+    @staticmethod
+    def question_judge(query_result):
+        query_return = [query_result[3], query_result[4], query_result[5], query_result[7], query_result[8]]
+        return query_return
+
+    @staticmethod
+    def question_read_before(query_result):
+        query_return = [query_result[3], query_result[5]]
+        return query_return
+
+    @staticmethod
+    def mind_think(query_result):
+        query_return = [query_result[1], query_result[3], query_result[5], query_result[6], query_result[7],
+                        query_result[8], query_result[9]]
+        return query_return
+
+    @staticmethod
+    def words_sentence(query_result):
+        query_result[6] = query_result[6].replace('}', '')
+        query_return = [query_result[3], query_result[6]]
+        return query_return
